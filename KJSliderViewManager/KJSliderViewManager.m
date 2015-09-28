@@ -13,9 +13,9 @@
 #define kTopScrollViewTag           (10000)
 #define kListScrollViewTag          (10001)
 #define kTitleLabeBetweenWidth      (20)
-#define kTextHighlightColor         [UIColor blackColor]
-#define kTextNormalColor            [UIColor grayColor]
-#define kNavBarHeight               64
+#define kTextHighlightColor         ([UIColor blackColor])
+#define kTextNormalColor            ([UIColor grayColor])
+#define kNavBarHeight               (64)
 
 typedef NS_ENUM(NSInteger,ScrollingStatus) {
     Left,
