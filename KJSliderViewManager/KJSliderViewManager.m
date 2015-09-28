@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
 @interface KJSliderViewManager ()<UIScrollViewDelegate>
 @property (nonatomic,weak) id <KJSliderViewManagerDelegate,KJSliderViewManagerDataSource> fatherVC;
 @property (nonatomic,assign) ScrollingStatus status;
-@property (nonatomic,assign) int currentIndex;
+@property (nonatomic,assign) NSInteger currentIndex;
 @property (nonatomic,strong) UIScrollView * topScrollView;
 @property (nonatomic,strong) UIScrollView * listScrollView;
 @property (nonatomic,strong) UIImageView * lineImageView;
@@ -96,7 +96,7 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
         _listScrollView.showsHorizontalScrollIndicator = NO;
         _listScrollView.showsVerticalScrollIndicator = NO;
         _listScrollView.bounces = NO;
-
+        
     }
     return _listScrollView;
 }
@@ -115,41 +115,41 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView  {
     if (!self.isTapTitleLabel && scrollView.tag == kListScrollViewTag) {
         UILabel * nextLabel;
+        UILabel * currentLabel;
+        CGRect rect = self.lineImageView.frame;
         if (scrollView.contentOffset.x - self.lastPositionX < 0) {
             self.status = Left;
             nextLabel = [self kj_getTitleLabelFromIndex:self.currentIndex-1];
+            if (nextLabel) {
+                currentLabel = [self kj_getTitleLabelFromIndex:self.currentIndex];
+                rect.origin.x = currentLabel.frame.origin.x - ((nextLabel.frame.size.width + kTitleLabeBetweenWidth) / self.listScrollView.frame.size.width) * fabs(scrollView.contentOffset.x - self.lastPositionX);
+            }
         }
-        else if (scrollView.contentOffset.x - self.lastPositionX > 0){
+        else if (scrollView.contentOffset.x - self.lastPositionX >= 0){
             self.status = Right;
             nextLabel = [self kj_getTitleLabelFromIndex:self.currentIndex+1];
-            
-        }
-        if (nextLabel) {
-            UILabel * currentLabel = [self kj_getCurrentTitleLabel];
-            CGRect rect = self.lineImageView.frame;
-
-            if (nextLabel.frame.size.width >= currentLabel.frame.size.width) {
-                rect.origin.x = ((currentLabel.frame.size.width + kTitleLabeBetweenWidth) / self.listScrollView.frame.size.width) * scrollView.contentOffset.x;
-                rect.size.width = currentLabel.frame.size.width + ((nextLabel.frame.size.width - currentLabel.frame.size.width) / self.listScrollView.frame.size.width) * fabs(scrollView.contentOffset.x - self.lastPositionX);
-
+            if (nextLabel) {
+                currentLabel = [self kj_getTitleLabelFromIndex:self.currentIndex];
+                rect.origin.x = currentLabel.frame.origin.x + ((currentLabel.frame.size.width + kTitleLabeBetweenWidth) / self.listScrollView.frame.size.width) * fabs(scrollView.contentOffset.x - self.lastPositionX);
             }
-            else if (nextLabel.frame.size.width < currentLabel.frame.size.width){
-                rect.origin.x = ((nextLabel.frame.size.width + kTitleLabeBetweenWidth) / self.listScrollView.frame.size.width) * scrollView.contentOffset.x;
-                rect.size.width = currentLabel.frame.size.width + ((nextLabel.frame.size.width - currentLabel.frame.size.width) / self.listScrollView.frame.size.width) * fabs(scrollView.contentOffset.x - self.lastPositionX);
-
-            }
-            self.lineImageView.frame = rect;
         }
+        rect.size.width = currentLabel.frame.size.width + ((nextLabel.frame.size.width - currentLabel.frame.size.width) / self.listScrollView.frame.size.width) * fabs(scrollView.contentOffset.x - self.lastPositionX);
+        self.lineImageView.frame = rect;
     }
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    self.currentIndex = (int)(scrollView.contentOffset.x / [[UIScreen mainScreen] bounds].size.width);
+    self.currentIndex = (scrollView.contentOffset.x / [[UIScreen mainScreen] bounds].size.width);
     self.lastPositionX = scrollView.contentOffset.x;
-    if (scrollView.tag == kListScrollViewTag) {
-        UILabel * label = [self kj_getCurrentTitleLabel];
-        if (label) {
-            [self kj_updateLineImageViewFrameWithCurrentLabelFrame:label.frame];
-        }
+    if (!self.isTapTitleLabel && scrollView.tag == kListScrollViewTag) {
+        [self kj_updateLineImageViewFrameWithCurrentLabelWithIndex:self.currentIndex];
+    }
+}
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    self.isTapTitleLabel = NO;
+    self.currentIndex = (scrollView.contentOffset.x / [[UIScreen mainScreen] bounds].size.width);
+    self.lastPositionX = scrollView.contentOffset.x;
+    if (!self.isTapTitleLabel && scrollView.tag == kListScrollViewTag) {
+        [self kj_updateLineImageViewFrameWithCurrentLabelWithIndex:self.currentIndex];
     }
 }
 #pragma mark -
@@ -184,7 +184,7 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
             }
         }
     }
-    UILabel * label = [self.topScrollViewArray objectAtIndex:0];
+    UILabel * label = [self kj_getTitleLabelFromIndex:0];
     if (label) {
         self.lineImageView.frame = CGRectMake(0, self.topScrollView.frame.size.height-2, label.frame.size.width, 2);
         [self.topScrollView addSubview:self.lineImageView];
@@ -202,8 +202,8 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
                 CGRect rect = vc.view.frame;
                 rect.origin.x = i*vc.view.frame.size.width;
                 vc.view.frame = rect;
-                self.listScrollView.frame = CGRectMake(0, 0, self.numberOfTitleViews*vc.view.frame.size.width, vc.view.frame.size.height-64);
-                self.listScrollView.contentSize = CGSizeMake(self.numberOfTitleViews*vc.view.frame.size.width, vc.view.frame.size.height-64);
+                self.listScrollView.frame = CGRectMake(0, 0, self.numberOfTitleViews*vc.view.frame.size.width, vc.view.frame.size.height);
+                self.listScrollView.contentSize = CGSizeMake(self.numberOfTitleViews*vc.view.frame.size.width, vc.view.frame.size.height);
                 [self.listScrollViewArray addObject:vc];
                 [self.listScrollView addSubview:vc.view];
             }
@@ -219,10 +219,7 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
     [self kj_listScrollViewScrollToIndex:[tap.view tag]];
 }
 - (void)kj_topScrollViewScrollToIndex:(NSInteger)index {
-    UILabel * label = [self.topScrollViewArray objectAtIndex:index];
-    if (label) {
-        [self kj_updateLineImageViewFrameWithCurrentLabelFrame:label.frame];
-    }
+    [self kj_updateLineImageViewFrameWithCurrentLabelWithIndex:index];
 }
 - (void)kj_listScrollViewScrollToIndex:(NSInteger)index {
     [self.listScrollView setContentOffset:CGPointMake(index*[[UIScreen mainScreen] bounds].size.width, self.listScrollView.contentOffset.y) animated:YES];
@@ -230,24 +227,25 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
     if ([self.fatherVC respondsToSelector:@selector(kjSliderViewManager:didScrollAtIndex:)]) {
         [self.fatherVC kjSliderViewManager:self didScrollAtIndex:index];
     }
-
+    
 }
-- (void)kj_updateLineImageViewFrameWithCurrentLabelFrame:(CGRect)labelFrame {
+- (void)kj_updateLineImageViewFrameWithCurrentLabelWithIndex:(NSInteger)index {
+    UILabel * label = [self kj_getTitleLabelFromIndex:index];
     __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:0.25 animations:^{
-        weakSelf.lineImageView.frame = CGRectMake(labelFrame.origin.x, weakSelf.lineImageView.frame.origin.y, labelFrame.size.width, 2);
+        weakSelf.lineImageView.frame = CGRectMake(label.frame.origin.x, weakSelf.lineImageView.frame.origin.y, label.frame.size.width, 2);
     } completion:^(BOOL finished) {
-        weakSelf.isTapTitleLabel = NO;
+        
     }];
 }
-- (UILabel *)kj_getCurrentTitleLabel {
-    if (self.topScrollViewArray && self.topScrollViewArray.count != 0) {
-        return self.topScrollViewArray[self.currentIndex];
-    }
-    return nil;
-}
 - (UILabel *)kj_getTitleLabelFromIndex:(NSInteger)index {
-    if ((self.topScrollViewArray && self.topScrollViewArray.count != 0) && (index < self.topScrollViewArray.count || index > 0) ) {
+    if ((self.topScrollViewArray && self.topScrollViewArray.count != 0)) {
+        if (index < 0) {
+            index = 0;
+        }
+        else if ((index >= self.topScrollViewArray.count)) {
+            index = self.topScrollViewArray.count - 1;
+        }
         return self.topScrollViewArray[index];
     }
     return nil;
