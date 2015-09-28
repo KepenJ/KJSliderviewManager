@@ -11,6 +11,7 @@
 @protocol KJSliderViewManagerDelegate;
 @protocol KJSliderViewManagerDataSource;
 @interface KJSliderViewManager : NSObject
+@property (nonatomic,assign) BOOL isTitleHighlight;        //default is YES
 - (instancetype)initWithFatherViewController:(UIViewController<KJSliderViewManagerDelegate,KJSliderViewManagerDataSource>  *)fatherVC;
 - (UIViewController *)currentViewController;
 @end

@@ -8,11 +8,13 @@
 
 #import "KJSliderViewManager.h"
 
-#define kDefaultFont        [UIFont systemFontOfSize:18]
-#define kDefaultLineColor   [UIColor redColor]
-#define kTopScrollViewTag       (10000)
-#define kListScrollViewTag      (10001)
-#define kTitleLabeBetweenWidth  (20)
+#define kDefaultFont                [UIFont systemFontOfSize:18]
+#define kDefaultLineColor           [UIColor redColor]
+#define kTopScrollViewTag           (10000)
+#define kListScrollViewTag          (10001)
+#define kTitleLabeBetweenWidth      (20)
+#define kTextHighlightColor         [UIColor blackColor]
+#define kTextNormalColor            [UIColor grayColor]
 
 typedef NS_ENUM(NSInteger,ScrollingStatus) {
     Left,
@@ -52,19 +54,22 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
         _lastPositionX = 0.0;
         _status = None;
         _currentIndex = 0;
-        [self prepareViews];
+        _isTitleHighlight = YES;
+        [self updateViews];
+        
     }
     return self;
 }
 #pragma mark -
 #pragma mark -PrepareViews
-- (void)prepareViews {
+- (void)updateViews {
     if ([self.fatherVC respondsToSelector:@selector(numberOfTitleViewInKJSliderViewTopScrollView:)]) {
         _numberOfTitleViews = [self.fatherVC numberOfTitleViewInKJSliderViewTopScrollView:self.topScrollView];
     }
     if ([self.fatherVC isKindOfClass:[UIViewController class]]) {
         [self kj_updateTopScrollView];
         [self kj_updateListScrollView];
+        [self kj_updateHighlightOfTitleOnTopScrollView];
         UIViewController * vc = (UIViewController *)self.fatherVC;
         vc.navigationItem.titleView = self.topScrollView;
         vc.view = self.listScrollView;
@@ -142,6 +147,7 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
     self.lastPositionX = scrollView.contentOffset.x;
     if (!self.isTapTitleLabel && scrollView.tag == kListScrollViewTag) {
         [self kj_updateLineImageViewFrameWithCurrentLabelWithIndex:self.currentIndex];
+        [self kj_updateHighlightOfTitleOnTopScrollView];
     }
 }
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
@@ -150,8 +156,16 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
     self.lastPositionX = scrollView.contentOffset.x;
     if (!self.isTapTitleLabel && scrollView.tag == kListScrollViewTag) {
         [self kj_updateLineImageViewFrameWithCurrentLabelWithIndex:self.currentIndex];
+        [self kj_updateHighlightOfTitleOnTopScrollView];
     }
 }
+#pragma mark -
+#pragma mark -setMethod
+- (void)setIsTitleHighlight:(BOOL)isTitleHighlight {
+    _isTitleHighlight = isTitleHighlight;
+    [self kj_updateHighlightOfTitleOnTopScrollView];
+}
+
 #pragma mark -
 #pragma mark -PrivteMethod
 - (void)kj_updateTopScrollView {
@@ -249,5 +263,18 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
         return self.topScrollViewArray[index];
     }
     return nil;
+}
+- (void)kj_updateHighlightOfTitleOnTopScrollView {
+    if (self.isTitleHighlight) {
+        for (int i = 0;i < self.topScrollViewArray.count;i++) {
+            UILabel * label = self.topScrollViewArray[i];
+            if (label && i == self.currentIndex) {
+                label.textColor = kTextHighlightColor;
+            }
+            else {
+                label.textColor = kTextNormalColor;
+            }
+        }
+    }
 }
 @end
