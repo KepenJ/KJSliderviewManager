@@ -10,9 +10,8 @@
 		800E12C21BB8EDC4000F6C29 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 800E12C11BB8EDC4000F6C29 /* main.m */; };
 		800E12C51BB8EDC4000F6C29 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 800E12C41BB8EDC4000F6C29 /* AppDelegate.m */; };
 		800E12C81BB8EDC4000F6C29 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 800E12C71BB8EDC4000F6C29 /* ViewController.m */; };
-		800E12CB1BB8EDC4000F6C29 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 800E12C91BB8EDC4000F6C29 /* Main.storyboard */; };
 		800E12CD1BB8EDC4000F6C29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 800E12CC1BB8EDC4000F6C29 /* Assets.xcassets */; };
-		800E12D01BB8EDC4000F6C29 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 800E12CE1BB8EDC4000F6C29 /* LaunchScreen.storyboard */; };
+		800E12DE1BB8EFF0000F6C29 /* KJSliderViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 800E12DD1BB8EFF0000F6C29 /* KJSliderViewManager.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,10 +21,10 @@
 		800E12C41BB8EDC4000F6C29 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		800E12C61BB8EDC4000F6C29 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		800E12C71BB8EDC4000F6C29 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		800E12CA1BB8EDC4000F6C29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		800E12CC1BB8EDC4000F6C29 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		800E12CF1BB8EDC4000F6C29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		800E12D11BB8EDC4000F6C29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		800E12DC1BB8EFF0000F6C29 /* KJSliderViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KJSliderViewManager.h; sourceTree = "<group>"; };
+		800E12DD1BB8EFF0000F6C29 /* KJSliderViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KJSliderViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +41,7 @@
 		800E12B41BB8EDC4000F6C29 = {
 			isa = PBXGroup;
 			children = (
+				800E12DB1BB8EFF0000F6C29 /* KJSliderViewManager */,
 				800E12BF1BB8EDC4000F6C29 /* KJSliderViewManagerDemo */,
 				800E12BE1BB8EDC4000F6C29 /* Products */,
 			);
@@ -62,9 +62,7 @@
 				800E12C41BB8EDC4000F6C29 /* AppDelegate.m */,
 				800E12C61BB8EDC4000F6C29 /* ViewController.h */,
 				800E12C71BB8EDC4000F6C29 /* ViewController.m */,
-				800E12C91BB8EDC4000F6C29 /* Main.storyboard */,
 				800E12CC1BB8EDC4000F6C29 /* Assets.xcassets */,
-				800E12CE1BB8EDC4000F6C29 /* LaunchScreen.storyboard */,
 				800E12D11BB8EDC4000F6C29 /* Info.plist */,
 				800E12C01BB8EDC4000F6C29 /* Supporting Files */,
 			);
@@ -77,6 +75,15 @@
 				800E12C11BB8EDC4000F6C29 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		800E12DB1BB8EFF0000F6C29 /* KJSliderViewManager */ = {
+			isa = PBXGroup;
+			children = (
+				800E12DC1BB8EFF0000F6C29 /* KJSliderViewManager.h */,
+				800E12DD1BB8EFF0000F6C29 /* KJSliderViewManager.m */,
+			);
+			path = KJSliderViewManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,9 +143,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				800E12D01BB8EDC4000F6C29 /* LaunchScreen.storyboard in Resources */,
 				800E12CD1BB8EDC4000F6C29 /* Assets.xcassets in Resources */,
-				800E12CB1BB8EDC4000F6C29 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,30 +156,12 @@
 			files = (
 				800E12C81BB8EDC4000F6C29 /* ViewController.m in Sources */,
 				800E12C51BB8EDC4000F6C29 /* AppDelegate.m in Sources */,
+				800E12DE1BB8EFF0000F6C29 /* KJSliderViewManager.m in Sources */,
 				800E12C21BB8EDC4000F6C29 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		800E12C91BB8EDC4000F6C29 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				800E12CA1BB8EDC4000F6C29 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		800E12CE1BB8EDC4000F6C29 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				800E12CF1BB8EDC4000F6C29 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		800E12D21BB8EDC4000F6C29 /* Debug */ = {
@@ -262,6 +249,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = KJSliderViewManagerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.55bbs.KJSliderViewManagerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -273,6 +261,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = KJSliderViewManagerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.55bbs.KJSliderViewManagerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
