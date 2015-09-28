@@ -15,6 +15,7 @@
 #define kTitleLabeBetweenWidth      (20)
 #define kTextHighlightColor         [UIColor blackColor]
 #define kTextNormalColor            [UIColor grayColor]
+#define kNavBarHeight               64
 
 typedef NS_ENUM(NSInteger,ScrollingStatus) {
     Left,
@@ -216,8 +217,8 @@ typedef NS_ENUM(NSInteger,ScrollingStatus) {
                 CGRect rect = vc.view.frame;
                 rect.origin.x = i*vc.view.frame.size.width;
                 vc.view.frame = rect;
-                self.listScrollView.frame = CGRectMake(0, 0, self.numberOfTitleViews*vc.view.frame.size.width, vc.view.frame.size.height);
-                self.listScrollView.contentSize = CGSizeMake(self.numberOfTitleViews*vc.view.frame.size.width, vc.view.frame.size.height);
+                self.listScrollView.frame = CGRectMake(0, 0, self.numberOfTitleViews*vc.view.frame.size.width, vc.view.frame.size.height-kNavBarHeight);
+                self.listScrollView.contentSize = CGSizeMake(self.numberOfTitleViews*vc.view.frame.size.width, vc.view.frame.size.height-kNavBarHeight);
                 [self.listScrollViewArray addObject:vc];
                 [self.listScrollView addSubview:vc.view];
             }

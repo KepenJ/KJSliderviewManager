@@ -23,12 +23,11 @@
     self.vcArray = [NSMutableArray array];
     for (int i = 0; i<self.titleArray.count; i++) {
         UIViewController * vc = [[UIViewController alloc] init];
-        if (i == 0) {
-            vc.view.backgroundColor = [UIColor blueColor];
-        }
-        else {
-            vc.view.backgroundColor = [UIColor grayColor];
-        }
+        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 50)];
+        label.center = vc.view.center;
+        label.text = [NSString stringWithFormat:@"我是VC_%d",i+1];
+        label.textAlignment = NSTextAlignmentCenter;
+        [vc.view addSubview:label];
         [self.vcArray addObject:vc];
     }
     self.titleView = [[KJSliderViewManager alloc]initWithFatherViewController:self];
